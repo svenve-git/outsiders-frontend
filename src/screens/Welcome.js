@@ -17,12 +17,16 @@ export default function WelcomeScreen({ navigation }) {
   return (
     // <ImageBackground source={/*** SET IMAGE BACKGROUND */}>
     <View>
-      <Text>Outsiders</Text>
-      <Text>Community-driven outdoor activities</Text>
-      <Button title="Sign up" onPress={() => navigation.navigate("Sign up")}>
+      <Text style={{ textAlign: "center", fontSize: 40, fontWeight: "bold" }}>
+        Outsiders
+      </Text>
+      <Text style={{ textAlign: "center", fontStyle: "italic" }}>
+        Community-driven outdoor activities
+      </Text>
+      <Button title="Signup" onPress={() => navigation.navigate("Sign up")}>
         Sign up
       </Button>
-      <Button title="Log in" onPress={() => navigation.navigate("Log in")}>
+      <Button title="Login" onPress={() => navigation.navigate("Log in")}>
         Log in
       </Button>
     </View>
