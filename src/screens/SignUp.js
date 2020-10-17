@@ -9,7 +9,7 @@ import { View, Text, Image, TextInput, Button } from "react-native"
  * Styling
  */
 
-const SignUpScreen = () => {
+export default function SignUpScreen({ navigation }) {
   handleSignUp = (e) => {
     console.log(e)
     return null
@@ -26,5 +26,3 @@ const SignUpScreen = () => {
     </View>
   )
 }
-
-export default SignUpScreen

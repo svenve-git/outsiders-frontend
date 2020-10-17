@@ -13,9 +13,10 @@ import {
  * Styling
  * Rewrite microcopy
  */
-const WelcomeScreen = ({ navigation }) => {
+export default function WelcomeScreen({ navigation }) {
   return (
-    <ImageBackground source={/*** SET IMAGE BACKGROUND */}>
+    // <ImageBackground source={/*** SET IMAGE BACKGROUND */}>
+    <View>
       <Text>Outsiders</Text>
       <Text>Community-driven outdoor activities</Text>
       <Button title="Sign up" onPress={() => navigation.navigate("Sign up")}>
@@ -24,8 +25,7 @@ const WelcomeScreen = ({ navigation }) => {
       <Button title="Log in" onPress={() => navigation.navigate("Log in")}>
         Log in
       </Button>
-    </ImageBackground>
+    </View>
+    // </ImageBackground>
   )
 }
-
-export default WelcomeScreen

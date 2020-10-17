@@ -8,7 +8,7 @@ import { View, Text, Image, TextInput, Button } from "react-native"
  * Styling
  */
 
-const LoginScreen = () => {
+export default function LoginScreen({ navigation }) {
   handleLogin = (e) => {
     console.log(e)
     return null
@@ -25,5 +25,3 @@ const LoginScreen = () => {
     </View>
   )
 }
-
-export default LoginScreen
