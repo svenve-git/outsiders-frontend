@@ -10,7 +10,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 // import HomeScreen from "./src/screens/Home"
 // import MapScreen from "./src/screens/Map"
-// import ListScreen from "./src/screens/List"
+import ListScreen from "./src/screens/List"
 // import ProfileScreen from "./src/screens/Profile"
 import LoginScreen from "./src/screens/Login"
 import SignUpScreen from "./src/screens/SignUp"
@@ -20,10 +20,15 @@ const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
 /** 3 APOLLOCLIENT  */
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client"
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+} from "@apollo/client"
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache(),
+  link: createHttpLink({ uri: "http://192.168.178.18:4000/graphql" }),
 })
 
 /**************************************************************************************************************************************************************************/
@@ -48,7 +53,8 @@ export default function App() {
         {/* <Tab.Screen name="Map" component={MapScreen} /> */}
         {/* </Tab.Navigator> */}
         {/* ) : ( */}
-        <Stack.Navigator initialRouteName="Welcome">
+        <Stack.Navigator initialRouteName="List">
+          <Stack.Screen name="List" component={ListScreen} />
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Sign up" component={SignUpScreen} />
           <Stack.Screen name="Log in" component={LoginScreen} />
