@@ -1,95 +1,135 @@
 import React, { useState } from "react"
 import { View, Text, Image, TextInput, Button, StyleSheet } from "react-native"
-
-/** TO DO
- * Add button (handler)
- * Add form + form state management
- * Add link to login page for users that already have an account
- * Test if new users are added to the DB
- * Make gender a dropdown / button input
- * Styling
- */
+import { useMutation, gql } from "@apollo/client"
+import { SIGNUP } from "../queries/queries"
+import { buildExecutionContext } from "graphql/execution/execute"
 
 export default function SignUpScreen({ navigation }) {
-  const [name, setName] = useState("name")
-  const [email, setEmail] = useState("email")
-  const [password, setPassword] = useState("password")
-  const [address, setAddress] = useState("address")
-  const [gender, setGender] = useState("gender")
+  /**
+   *  Form state management (local)
+   */
+  const [name, setName] = useState("Marie Klaassen")
+  const [email, setEmail] = useState("marie@mail.nl")
+  const [password, setPassword] = useState("verystrongpassword")
+  const [address, setAddress] = useState("Damrak 3, 1012MB, Amsterdam")
+  const [gender, setGender] = useState("Female")
+
+  /**
+   *  App state management
+   */
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
-  // const [form, setForm] = useState("")
-
-  // const handleTextInput = (e) => {
-  //   setForm({ ...form, [e.target.name]: e.target.value })
-  // }
-
-  handleSignUp = (e) => {
+  /**
+   *  Handlers
+   */
+  const [SignUp] = useMutation(SIGNUP)
+  const handleSignUp = (e) => {
+    e.preventDefault()
     if (!name || !email || !password || !address || !gender) {
       setMessage("Please fill in all the required fields")
-    }
-    setLoading(true)
-
-    console.log(e)
-    return null
+    } else
+      try {
+        SignUp({ variables: { name, email, password, address, gender } })
+      } catch (e) {
+        console.log("error:", e)
+      }
   }
 
+  /**
+   *  View output
+   */
   return (
     <View style={styles.container}>
-      <Text>Sign up</Text>
+      <Text style={styles.heading}>Sign up</Text>
       <Text>{message}</Text>
-      <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-        placeholder="name*"
-        value={name}
-        onChangeText={(text) => setName(text)}
-      />
-      <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-        placeholder="email*"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-      />
-      <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-        placeholder="password*"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-      />
-      <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-        placeholder="address*"
-        value={address}
-        onChangeText={(text) => setAddress(text)}
-      />
-      <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-        placeholder="gender*"
-        value={gender}
-        onChangeText={(text) => setGender(text)}
-      />
-      <Button title="Sign up" onPress={handleSignUp}>
-        Sign up
-      </Button>
-      <Text>
-        Already have an account?{" "}
-        <Text
-          style={{ color: "blue" }}
-          onPress={() => navigation.navigate("Log in")}
-        >
-          Log in
+      <Text>{loading}</Text>
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          placeholder="name*"
+          value={name}
+          onChangeText={(text) => setName(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="email*"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="password*"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="address*"
+          value={address}
+          onChangeText={(text) => setAddress(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="gender*"
+          value={gender}
+          onChangeText={(text) => setGender(text)}
+        />
+        <Button title="Sign up" onPress={handleSignUp}>
+          Sign up
+        </Button>
+      </View>
+      <View style={styles.text}>
+        <Text>
+          Already have an account?{" "}
+          <Text
+            style={{ color: "blue" }}
+            onPress={() => navigation.navigate("Log in")}
+          >
+            Log in
+          </Text>
         </Text>
-      </Text>
+      </View>
     </View>
   )
 }
 
+/**
+ *  Stylesheet
+ */
+
 const styles = StyleSheet.create({
   container: {
+    alignItems: "center",
+  },
+  form: {
     justifyContent: "center",
     marginTop: 50,
     padding: 20,
     backgroundColor: "#ffffff",
   },
+  input: {
+    height: 40,
+    width: 300,
+    marginBottom: 20,
+    borderColor: "gray",
+    borderWidth: 1,
+  },
+  heading: {
+    fontSize: 40,
+    fontWeight: "600",
+    marginTop: 40,
+  },
+  text: {
+    marginTop: 30,
+  },
 })
+
+// const styles = StyleSheet.create({
+//   form: {
+//     flex: 1,
+//     backgroundColor: "#fff",
+//     justifyContent: "space-around",
+//     alignItems: "center",
+//     marginBottom: 7,
+//   },
