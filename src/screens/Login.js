@@ -12,7 +12,6 @@ export default function LoginScreen({ navigation }) {
     e.preventDefault()
     try {
       Login({ variables: { email: email, password: password } })
-      console.log("result:", data)
     } catch (error) {
       console.log("error:", error)
     }
@@ -22,8 +21,6 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.form}>
       <Text style={styles.heading}>Log In</Text>
-      <Text>{email}</Text>
-      <Text>{password}</Text>
       <View>
         <Text>Enter email:</Text>
         <TextInput
