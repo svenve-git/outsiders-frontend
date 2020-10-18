@@ -1,13 +1,26 @@
 /** Overview of the queries to be passed through Apollo Client to the GraphQL API */
 import { gql } from "@apollo/client"
 
+export const FETCH_ACTIVITIES = gql`
+  query FetchActivities {
+    allActivities {
+      id
+      title
+      date
+    }
+  }
+`
+export const FETCH_ACTIVITYTYPES = gql`
+  query FetchActivityTypes {
+    allActivitytypes {
+      name
+    }
+  }
+`
 export const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
-      user {
-        id
-      }
     }
   }
 `
