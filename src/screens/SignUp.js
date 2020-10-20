@@ -18,19 +18,20 @@ export default function SignUpScreen({ navigation }) {
    *  App state management
    */
   const [message, setMessage] = useState("")
-  const [loading, setLoading] = useState(false)
 
   /**
    *  Handlers
    */
-  const [SignUp] = useMutation(SIGNUP)
-  const handleSignUp = (e) => {
+  const [SignUp, { loading, error, data }] = useMutation(SIGNUP)
+
+  const handleSignUp = async (e) => {
     e.preventDefault()
     if (!name || !email || !password || !address || !gender) {
       setMessage("Please fill in all the required fields")
     } else
       try {
-        SignUp({ variables: { name, email, password, address, gender } })
+        await SignUp({ variables: { name, email, password, address, gender } })
+        console.log("data@signup", data)
       } catch (e) {
         console.log("error:", e)
       }
@@ -43,7 +44,6 @@ export default function SignUpScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.heading}>Sign up</Text>
       <Text>{message}</Text>
-      <Text>{loading}</Text>
       <View style={styles.form}>
         <TextInput
           style={styles.input}

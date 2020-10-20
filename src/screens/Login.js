@@ -1,22 +1,33 @@
 import React, { useState } from "react"
 import { View, Text, Image, TextInput, Button, StyleSheet } from "react-native"
-import { useMutation, gql } from "@apollo/client"
-import { LOGIN } from "../queries/queries"
+import { useMutation, useQuery, gql } from "@apollo/client"
+import { LOGIN, CURRENTUSER } from "../queries/queries"
+import * as SecureStore from "expo-secure-store"
+import AsyncStorage from "@react-native-community/async-storage"
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, setSignedIn }) {
   const [email, setEmail] = useState("test@mail.com")
   const [password, setPassword] = useState("123")
-  const [Login, { data }] = useMutation(LOGIN)
+  const [Login, data] = useMutation(LOGIN)
+
+  console.log("@login", data)
 
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      Login({ variables: { email: email, password: password } })
-    } catch (error) {
-      console.log("error:", error)
+      await Login({ variables: { email: email, password: password } })
+      // SecureStore.setItemAsync(loggedIn, data)
+      console.log("data after login attempt", data)
+      await AsyncStorage.setItem("token", data.login)
+      setSignedIn(true)
+    } catch (e) {
+      console.log("error:", e)
     }
     // CLEAR DATA FROM INPUT FIELDS?
   }
+
+  // const user = useQuery(CURRENTUSER)
+  // console.log("User", user)
 
   return (
     <View style={styles.form}>
