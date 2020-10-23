@@ -1,14 +1,15 @@
 import React, { useState } from "react"
-import { View, Text, Image, TextInput, Button, StyleSheet } from "react-native"
-import { useMutation, gql } from "@apollo/client"
+import { View, Text, TextInput, Button, StyleSheet } from "react-native"
+import { useMutation } from "@apollo/client"
 import { SIGNUP } from "../queries/queries"
-import { buildExecutionContext } from "graphql/execution/execute"
+import AsyncStorage from "@react-native-community/async-storage"
+import { isSignedInVar } from "../cache"
 
 export default function SignUpScreen({ navigation }) {
   /**
-   *  Form state management (local)
+   *  Form state management
    */
-  const [name, setName] = useState("Marie Klaassen")
+  const [fullName, setName] = useState("Marie Klaassen")
   const [email, setEmail] = useState("marie@mail.nl")
   const [password, setPassword] = useState("verystrongpassword")
   const [address, setAddress] = useState("Damrak 3, 1012MB, Amsterdam")
@@ -22,16 +23,22 @@ export default function SignUpScreen({ navigation }) {
   /**
    *  Handlers
    */
-  const [SignUp, { loading, error, data }] = useMutation(SIGNUP)
+  const [SignUp, { data }] = useMutation(SIGNUP, {
+    onCompleted: (data) => {
+      AsyncStorage.setItem("token", data.signup)
+      isSignedInVar(true)
+    },
+  })
 
   const handleSignUp = async (e) => {
     e.preventDefault()
-    if (!name || !email || !password || !address || !gender) {
+    if (!fullName || !email || !password || !address || !gender) {
       setMessage("Please fill in all the required fields")
     } else
       try {
-        await SignUp({ variables: { name, email, password, address, gender } })
-        console.log("data@signup", data)
+        await SignUp({
+          variables: { fullName, email, password, address, gender },
+        })
       } catch (e) {
         console.log("error:", e)
       }
@@ -48,7 +55,7 @@ export default function SignUpScreen({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder="name*"
-          value={name}
+          value={fullName}
           onChangeText={(text) => setName(text)}
         />
         <TextInput
@@ -124,12 +131,3 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 })
-
-// const styles = StyleSheet.create({
-//   form: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     justifyContent: "space-around",
-//     alignItems: "center",
-//     marginBottom: 7,
-//   },
