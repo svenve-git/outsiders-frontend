@@ -1,21 +1,16 @@
 # Outsiders
 
-
-
 ### Description
 
-This project gives a platform to find, create and share outdoor activities. It helps people host and join activities, so they can enjoy being outdoor together.
+This project gives a platform to find, create and share outdoor activities. It helps people host and join activities, so they can enjoy being outdoor together. So do you feel like going out, but are bored of the obligatory 'jog around the block'? Or just feel like kicking a ball with some other people? Post a public activity and invite them! Or have a look and see what's happening.
 
-Working from home and feeling pressure to go for the obligatory (boring) run? Or just feel like kicking a ball with some others? Post a public activity and invite them! Or see if there's others already out there. Rather not walk in the park alone in the evenings? Maybe you can connect with others who want the same.
-
-This App features:
-
-- a GraphQL API
-- a Map where activities can be found and posted
+Of course, the main reason for this app is for me to practice & learn full stack development, and showcase some of the things I have learned. It's probably good to know that this project took about two weeks, and is my first project using GraphQL and React Native.
 
 ## Demo
 
-## Technologies used
+- [ ] add demo recording
+
+## Stack:
 
 ### Backend
 
@@ -24,15 +19,17 @@ This App features:
 - PostgreSQL
 - Express
 - Apollo Server
-- JWT
+- JWT Authorization
 
 ### Frontend
 
 - React Native (Expo)
 - Apollo Client
 
-## Learning moments
-
 ## Documentation
 
-link to backend repository
+[Back End](https://github.com/svenve-git/outsiders-backend)
+
+[Wireframe](./docs/Wireframe_v1.png)
+
+[Database Diagram](./docs/Database_diagram.png)
