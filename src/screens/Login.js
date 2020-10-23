@@ -1,40 +1,43 @@
 import React, { useState } from "react"
-import { View, Text, Image, TextInput, Button, StyleSheet } from "react-native"
-import { useMutation, useQuery, gql } from "@apollo/client"
-import { LOGIN, CURRENTUSER } from "../queries/queries"
-import * as SecureStore from "expo-secure-store"
+import { View, Text, TextInput, Button, StyleSheet } from "react-native"
+import { useMutation } from "@apollo/client"
+import { LOGIN } from "../queries/queries"
+import { isSignedInVar } from "../cache"
 import AsyncStorage from "@react-native-community/async-storage"
 
-export default function LoginScreen({ navigation, setSignedIn }) {
+export default function LoginScreen({ navigation }) {
+  /**
+   * Form State
+   */
   const [email, setEmail] = useState("test@mail.com")
   const [password, setPassword] = useState("123")
-  const [Login, data] = useMutation(LOGIN)
-
-  console.log("@login", data)
+  /**
+   * Handlers
+   */
+  const [Login, { data }] = useMutation(LOGIN, {
+    onCompleted: (data) => {
+      AsyncStorage.setItem("token", data.login)
+      isSignedInVar(true)
+    },
+  })
 
   const handleLogin = async (e) => {
-    e.preventDefault()
     try {
       await Login({ variables: { email: email, password: password } })
-      // SecureStore.setItemAsync(loggedIn, data)
-      console.log("data after login attempt", data)
-      await AsyncStorage.setItem("token", data.login)
-      setSignedIn(true)
     } catch (e) {
       console.log("error:", e)
     }
-    // CLEAR DATA FROM INPUT FIELDS?
   }
-
-  // const user = useQuery(CURRENTUSER)
-  // console.log("User", user)
-
+  /**
+   * View output
+   */
   return (
     <View style={styles.form}>
       <Text style={styles.heading}>Log In</Text>
       <View>
         <Text>Enter email:</Text>
         <TextInput
+          keyboardType="email-address"
           style={styles.input}
           placeholder="example@mail.com"
           value={email}
@@ -46,7 +49,7 @@ export default function LoginScreen({ navigation, setSignedIn }) {
         <TextInput
           style={styles.input}
           placeholder="verystrongpassword"
-          label="Enter email:"
+          label="Enter password:"
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
@@ -66,6 +69,10 @@ export default function LoginScreen({ navigation, setSignedIn }) {
     </View>
   )
 }
+
+/**
+ * Styling
+ */
 
 const styles = StyleSheet.create({
   form: {

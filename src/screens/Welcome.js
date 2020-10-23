@@ -1,6 +1,6 @@
+import { useQuery } from "@apollo/client"
 import React from "react"
 import { View, Text, StyleSheet, Button, ImageBackground } from "react-native"
-
 /****
  * TO DO:
  * Styling
