@@ -33,3 +33,5 @@ Of course, the main reason for this app is for me to practice & learn full stack
 [Wireframe](./docs/Wireframe_v1.png)
 
 [Database Diagram](./docs/Database_diagram.png)
+
+[Project Board](./docs/Project_Board_Screenshot.png)
