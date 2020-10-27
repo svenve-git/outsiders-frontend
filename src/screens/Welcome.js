@@ -1,6 +1,6 @@
-import { useQuery } from "@apollo/client"
 import React from "react"
-import { View, Text, StyleSheet, Button, ImageBackground } from "react-native"
+import { View, StyleSheet, ImageBackground } from "react-native"
+import { Button, Text, Title, Headline } from "react-native-paper"
 /****
  * TO DO:
  * Styling
@@ -8,35 +8,44 @@ import { View, Text, StyleSheet, Button, ImageBackground } from "react-native"
  */
 export default function WelcomeScreen({ navigation }) {
   return (
-    // <ImageBackground source={/*** SET IMAGE BACKGROUND */}>
-    <View style={styles.container}>
-      <Text style={styles.heading}>Outsiders</Text>
-      <Text style={styles.text}>Community-driven outdoor activities</Text>
-      <View styles={styles.buttons}>
-        <Button title="Signup" onPress={() => navigation.navigate("Sign up")}>
-          Sign up
-        </Button>
-        <Button title="Login" onPress={() => navigation.navigate("Log in")}>
-          Log in
-        </Button>
+    <ImageBackground
+      style={{
+        height: "100%",
+        // alignContent: "center",
+        // justifyContent: "center",
+        // alignSelf: "center"
+      }}
+      source={require("../assets/backgroundv3.png")}
+    >
+      <View style={styles.container}>
+        <Headline style={styles.headline}>Outsiders</Headline>
+        <Text style={{ marginTop: 450, fontSize: 20 }}>
+          Community-based outdoor activities
+        </Text>
+        <View style={styles.buttons}>
+          <Button title="Signup" onPress={() => navigation.navigate("Sign up")}>
+            Sign up
+          </Button>
+          <Button title="Login" onPress={() => navigation.navigate("Log in")}>
+            Log in
+          </Button>
+        </View>
       </View>
-    </View>
-    // </ImageBackground>
+    </ImageBackground>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
   },
-  heading: {
-    marginTop: 40,
-    marginBottom: 40,
-    fontSize: 40,
-    fontWeight: "600",
+  headline: {
+    marginTop: 60,
+    fontSize: 32,
   },
   buttons: {
-    marginTop: 80,
+    marginTop: 20,
     marginBottom: 40,
   },
   text: {
