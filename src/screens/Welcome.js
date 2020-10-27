@@ -1,19 +1,12 @@
 import React from "react"
 import { View, StyleSheet, ImageBackground } from "react-native"
-import { Button, Text, Title, Headline } from "react-native-paper"
-/****
- * TO DO:
- * Styling
- * Rewrite microcopy
- */
+import { Button, Text, Headline } from "react-native-paper"
+
 export default function WelcomeScreen({ navigation }) {
   return (
     <ImageBackground
       style={{
         height: "100%",
-        // alignContent: "center",
-        // justifyContent: "center",
-        // alignSelf: "center"
       }}
       source={require("../assets/backgroundv3.png")}
     >
