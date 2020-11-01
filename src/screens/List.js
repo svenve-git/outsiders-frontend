@@ -1,97 +1,164 @@
-import React, { useEffect, useState } from "react"
-import { ScrollView, View, Text, StyleSheet } from "react-native"
-// import { Picker } from "@react-native-community/picker"
-import { useQuery, gql } from "@apollo/client"
-import { FETCH_ACTIVITIES, FETCH_ACTIVITYTYPES } from "../queries/queries"
-
+import React, { useState } from "react"
+import { ScrollView, View, StyleSheet, Pressable, Picker } from "react-native"
+import {
+  Text,
+  Button,
+  FAB,
+  Title,
+  Paragraph,
+  List,
+  ActivityIndicator,
+  Divider,
+} from "react-native-paper"
+import { useQuery } from "@apollo/client"
+import { FETCH_ACTIVITIES_AND_TYPES } from "../queries/queries"
+import { FontAwesome5 } from "@expo/vector-icons"
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native-gesture-handler"
 /**
  * To do:
- * Make sure activities are fetched before rendering
- * Fix Picker
+ * Write component for individual listings
  * Add more details to the activities
  * Add another filter for date
+ * Add pagination (and separate fetching again)
  * Add links to activity detail pages
  * Styling
  */
 
 export default function ListScreen({ navigation }) {
-  const { loading, error, data: activities } = useQuery(FETCH_ACTIVITIES)
-  const { loading: loading2, error: err, data: types } = useQuery(
-    FETCH_ACTIVITYTYPES
-  )
-  const [type, setType] = useState("")
+  const { loading, error, data } = useQuery(FETCH_ACTIVITIES_AND_TYPES)
+  const [activityType, setActivityType] = useState("Any")
+  const [showDetails, setShowDetails] = useState(false)
 
-  const listedActivities = activities.allActivities.filter((activity) => {
-    if (type) {
-      activity.activityType === type
-    } else return activity
-  })
+  if (loading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
+  if (error) return <Text>`Error! ${error.message}`</Text>
+  if (!data) return <Text>Not found</Text>
 
-  // if (error || err) {
-  //   return (
-  //     <View>
-  //       <Text>Error: {error || err}</Text>
-  //     </View>
-  //   )
-  // }
+  let listedActivities = [...data.allActivities]
+  let activityTypes = [...data.allActivityTypes]
+
+  // console.log("type:", type)
+  // console.log("activityTypes:", activityTypes)
+  // data.allActivityTypes.map((type) => {
+  //   console.log(type)
+  // })
+
+  if (activityType) {
+    if (activityType === "Any") {
+      listedActivities = [...data.allActivities]
+    } else {
+      listedActivities = data.allActivities.filter((activity) => {
+        return activity.activityType.name === activityType
+      })
+    }
+  }
+  // console.log("activities", listedActivities)
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>Activities</Text>
-      {/* <Picker
-        selectedValue={type}
-        style={{ height: 50, width: 100 }}
-        onValueChange={(itemValue) => setType(itemValue)}
-      >
-        {types.allActivityTypes.map((type) => (
-          <Picker.Item label={type.name} value={type.name} />
-        ))}
-      </Picker> */}
-      {loading || loading2 ? (
-        <Text>Loading</Text>
-      ) : (
-        listedActivities.map((activity) => (
-          <View key={activity.id}>
-            <Text>{activity.title}</Text>
-            <Text>{activity.date}</Text>
-          </View>
-        ))
-      )}
-      <Text style={{ marginTop: 40 }}>
-        No account?{" "}
-        <Text
-          style={{ color: "blue" }}
-          onPress={() => navigation.navigate("Sign up")}
+    <View style={styles.container}>
+      <View>
+        <Picker
+          selectedValue={activityType}
+          style={{ height: 50, width: 200 }}
+          onValueChange={(itemValue) => setActivityType(itemValue)}
         >
-          Sign up
-        </Text>
-      </Text>
-      <Text
-        style={{ color: "blue" }}
-        onPress={() => navigation.navigate("Log in")}
-      >
-        Log in
-      </Text>
-    </ScrollView>
+          <Picker.Item key="Any" label="Any" value="Any" />
+          {activityTypes.map((type) => {
+            return (
+              <Picker.Item key={type.id} label={type.name} value={type.name} />
+            )
+          })}
+        </Picker>
+      </View>
+      <ScrollView>
+        {loading ? (
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <ActivityIndicator size="large" />
+          </View>
+        ) : (
+          listedActivities.map((activity, index) => (
+            <View style={styles.listItem}>
+              <TouchableHighlight
+                onPress={() => {
+                  setShowDetails(index === showDetails ? null : index)
+                }}
+                key={activity.id}
+              >
+                <FontAwesome5 name="running" />
+                <Text>{activity.title}</Text>
+                {index === showDetails && (
+                  <View style={styles.details}>
+                    <Text>
+                      Starts: {activity.date} at {activity.startingTime}
+                    </Text>
+                    <Text>Host: {activity.host.fullName}</Text>
+                  </View>
+                )}
+
+                <Divider />
+              </TouchableHighlight>
+            </View>
+          ))
+        )}
+      </ScrollView>
+      <FAB
+        style={styles.fab}
+        icon="plus"
+        onPress={() => {
+          navigation.navigate("Create activity")
+        }}
+      ></FAB>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    marginBottom: 5,
+    flex: 1,
+    // alignItems: "center",
+    justifyContent: "center",
   },
-  heading: {
-    marginTop: 40,
-    marginBottom: 40,
-    fontSize: 40,
-    fontWeight: "600",
-  },
-  buttons: {
-    marginTop: 80,
-    marginBottom: 40,
-  },
+  // buttons: {
+  //   marginTop: 80,
+  //   marginBottom: 40,
+  // },
   text: {
     fontSize: 20,
+  },
+  listItem: {
+    flexGrow: 1,
+    flexDirection: "row",
+    flexWrap: "nowrap",
+
+    paddingLeft: 20,
+    paddingRight: 20,
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    marginBottom: 3,
+    elevation: 3,
+  },
+  details: {},
+  card: {
+    height: 50,
+    marginLeft: 6,
+    marginRight: 6,
+    width: 300,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 })
