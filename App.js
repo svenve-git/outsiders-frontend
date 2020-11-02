@@ -8,6 +8,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native"
 /** 2 NAVIGATION */
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
+import CreateActivityScreen from "./src/screens/CreateActivity"
 import LoginScreen from "./src/screens/Login"
 import SignUpScreen from "./src/screens/SignUp"
 import WelcomeScreen from "./src/screens/Welcome"
@@ -17,52 +18,13 @@ const Stack = createStackNavigator()
 
 /** 3 Apollo Client with authentication 'middleware' */
 import AsyncStorage from "@react-native-community/async-storage"
-import { cache, isSignedInVar } from "./src/cache"
-import { CURRENTUSER } from "./src/queries/queries"
-import { setContext } from "@apollo/client/link/context"
-import {
-  ApolloProvider,
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink,
-  useQuery,
-  makeVar,
-  useReactiveVar,
-} from "@apollo/client"
+import { theme, client, isSignedInVar } from "./src/config"
+import { ApolloProvider, useReactiveVar } from "@apollo/client"
 
 /** Setting up authLink so we send along auth headers with our requests to GraphQL */
 
-const authLink = setContext(async (_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = await AsyncStorage.getItem("token")
-
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    },
-  }
-})
-
-export const client = new ApolloClient({
-  cache: cache,
-  link: authLink.concat(
-    createHttpLink({ uri: "http://192.168.178.18:4000/graphql" })
-  ),
-})
 /** 4 Styling: Paper Material UI */
-import { DefaultTheme, Provider as PaperProvider } from "react-native-paper"
-import CreateActivityScreen from "./src/screens/CreateActivity"
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: "tomato",
-    accent: "yellow",
-  },
-}
+import { Provider as PaperProvider } from "react-native-paper"
 
 /**************************************************************************************************************************************************************************/
 /**
@@ -73,12 +35,12 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const isSignedIn = useReactiveVar(isSignedInVar)
 
-  // Check if the user is logged in or not
+  // Check if there's still a valid token in local storage
   useEffect(() => {
     async function getToken() {
       const token = await AsyncStorage.getItem("token")
       if (token) {
-        console.log("token in App.js auth check:", token)
+        // console.log("token found in App.js auth check:", token)
         isSignedInVar(true)
         setLoading(false)
       } else {
@@ -114,11 +76,19 @@ export default function App() {
               <>
                 <Stack.Screen
                   name="Welcome"
-                  options={{ header: () => null }}
+                  options={{}}
                   component={WelcomeScreen}
                 />
-                <Stack.Screen name="Sign up" component={SignUpScreen} />
-                <Stack.Screen name="Log in" component={LoginScreen} />
+                <Stack.Screen
+                  name="Sign up"
+                  screenOptions={{ header: () => null }}
+                  component={SignUpScreen}
+                />
+                <Stack.Screen
+                  name="Log in"
+                  screenOptions={{ header: () => null }}
+                  component={LoginScreen}
+                />
               </>
             )}
           </Stack.Navigator>
