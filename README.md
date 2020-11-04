@@ -10,6 +10,37 @@ Of course, the main reason for this app is for me to practice & learn full stack
 
 - [ ] add demo recording
 
+### Under the hood
+
+There are a few things happening under the hood that I think are nice to share. 
+
+#### Authorization setup
+First, I set up an AuthProvider that uses the useContext hook of React to give the app access to the login/logout functions and the current user values. In this, I took inspiration from Ben Awad. Reading the Apollo Client docs I found this new feature 'reactive variable' which sounded really cool so I refactored my auth logic to use that in combination with the Apollo cache. This way, I had immediate and global access to a function that could switch the isSignedIn state. The App immediately picks up when a user is logged in and sends them to their home stack. 
+
+```
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        isSignedIn: {
+          read() {
+            return isSignedInVar()
+          },
+        },
+      },
+    },
+  },
+})
+```
+
+#### Randomly generated coordinates
+When I was seeding some dummy data to see how the activities looked on the map, I first hardcoded the coordinates and changed a few numbers here and there to spread them around a bit. Well, when I fired up the App, they all turned out to be in Westerpark. Not exactly random and of course a bit inconsiderate to the rest of the city. So to solve this problem I set some outer boundaries in which I wanted my activities to be and then wrote the following function to generate random coordinates within this field: 
+
+``` 
+          latitude: (52.3 + Math.random() / 10).toFixed(6),
+          longitude: (4.8 + Math.random() / 5).toFixed(6),
+```
+
 ## Stack:
 
 ### Backend
