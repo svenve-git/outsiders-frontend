@@ -8,7 +8,26 @@ Of course, the main reason for this app is for me to practice & learn full stack
 
 ## Demo
 
-- [ ] add demo recording
+
+
+
+## Stack:
+
+### Backend
+
+- GraphQL
+- Sequelize ORM
+- PostgreSQL
+- Express
+- Apollo Server
+- JWT Authorization
+
+### Frontend
+
+- React Native (Expo)
+- Apollo Client
+- Font Awesome
+- React Native Paper (Material UI framework)
 
 ### Under the hood
 
@@ -42,22 +61,6 @@ When I was seeding some dummy data to see how the activities looked on the map, 
           latitude: (52.3 + Math.random() / 10).toFixed(6),
           longitude: (4.8 + Math.random() / 5).toFixed(6),
 ```
-
-## Stack:
-
-### Backend
-
-- GraphQL
-- Sequelize ORM
-- PostgreSQL
-- Express
-- Apollo Server
-- JWT Authorization
-
-### Frontend
-
-- React Native (Expo)
-- Apollo Client
 
 ## Documentation
 
