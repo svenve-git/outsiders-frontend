@@ -8,7 +8,6 @@ import moment from "moment"
 
 /**
  * To Do:
- * - update seeder => set some different locations
  * - add filters for activityType
  * - add custom marker for each type
  * - Styling -> theme, callouts, filters
@@ -25,7 +24,6 @@ export default function MapScreen({ navigation }) {
   /**
    *  Conditionals
    */
-
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -43,9 +41,7 @@ export default function MapScreen({ navigation }) {
   /**
    *  Filters
    */
-
   let activities = [...data.allActivities]
-  // console.log("activities before filtered", activities)
 
   if (date) {
     if (date === "") {
@@ -60,10 +56,31 @@ export default function MapScreen({ navigation }) {
       })
   }
 
-  // console.log("activities to be rendered", activities)
-
   return (
     <View style={styles.container}>
+      <View style={styles.filters}>
+        <FAB
+          style={{ margin: "1%" }}
+          label="today"
+          onPress={() => {
+            setDate(today)
+          }}
+        />
+        <FAB
+          style={{ margin: "1%" }}
+          label="tomorrow"
+          onPress={() => {
+            setDate(tomorrow)
+          }}
+        />
+        <FAB
+          style={{ margin: "1%" }}
+          label="this week"
+          onPress={() => {
+            setDate("this week")
+          }}
+        />
+      </View>
       <MapView
         // provider={PROVIDER_GOOGLE}
         initialRegion={{
@@ -93,45 +110,23 @@ export default function MapScreen({ navigation }) {
           )
         })}
       </MapView>
-      <>
-        <FAB
-          style={styles.filter1}
-          label="today"
-          onPress={() => {
-            setDate(today)
-          }}
-        />
-        <FAB
-          style={styles.filter2}
-          label="tomorrow"
-          onPress={() => {
-            setDate(tomorrow)
-          }}
-        />
-        <FAB
-          style={styles.filter3}
-          label="this week"
-          onPress={() => {
-            setDate("this week")
-          }}
-        />
-        <FAB
-          style={styles.fab}
-          icon="plus"
-          onPress={() => {
-            navigation.navigate("Create activity")
-          }}
-        />
-      </>
+
+      <FAB
+        style={styles.fab}
+        icon="plus"
+        onPress={() => {
+          navigation.navigate("Create activity")
+        }}
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: "10%",
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    justifyContent: "flex-end",
     alignItems: "center",
   },
   map: {
@@ -139,27 +134,15 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     // flex: 1,
   },
+  filters: {
+    margin: "2%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
   fab: {
     position: "absolute",
     margin: 16,
     right: 0,
     bottom: 0,
-  },
-  filter1: {
-    position: "absolute",
-    margin: 10,
-    top: 0,
-    left: 0,
-  },
-  filter2: {
-    position: "absolute",
-    margin: 10,
-    top: 0,
-  },
-  filter3: {
-    position: "absolute",
-    margin: 10,
-    top: 0,
-    right: 0,
   },
 })
