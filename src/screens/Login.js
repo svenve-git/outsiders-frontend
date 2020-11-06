@@ -56,7 +56,6 @@ export default function LoginScreen({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder="verystrongpassword"
-              label="password"
               value={password}
               onChangeText={(text) => setPassword(text)}
             />

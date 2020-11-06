@@ -66,7 +66,11 @@ export default function App() {
           <Stack.Navigator initialRouteName="Welcome">
             {isSignedIn ? (
               <>
-                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen
+                  name="Home"
+                  options={{ header: () => null }}
+                  component={HomeScreen}
+                />
                 <Stack.Screen
                   name="Create activity"
                   component={CreateActivityScreen}
