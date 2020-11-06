@@ -79,7 +79,7 @@ export default function ListScreen({ navigation }) {
         </Picker>
       </View>
       <ScrollView>
-        {loading ? (
+        {/* {loading ? (
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
@@ -109,7 +109,7 @@ export default function ListScreen({ navigation }) {
               </TouchableHighlight>
             </View>
           ))
-        )}
+        )} */}
       </ScrollView>
       <FAB
         style={styles.fab}
@@ -124,6 +124,7 @@ export default function ListScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: "10%",
     flex: 1,
     // alignItems: "center",
     justifyContent: "center",
