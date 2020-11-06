@@ -8,7 +8,7 @@ Of course, the main reason for this app is for me to practice & learn full stack
 
 ## Demo
 
-
+[Demo](./src/assets/Outsiders_demo.gif)
 
 
 ## Stack:
