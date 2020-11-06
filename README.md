@@ -62,6 +62,8 @@ When I was seeding some dummy data to see how the activities looked on the map, 
           longitude: (4.8 + Math.random() / 5).toFixed(6),
 ```
 
+Simple, but fun.
+
 ## Documentation
 
 [Back End](https://github.com/svenve-git/outsiders-backend)
