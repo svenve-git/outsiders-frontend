@@ -34,7 +34,7 @@ Of course, the main reason for this app is for me to practice & learn full stack
 There are a few things happening under the hood that I think are nice to share. 
 
 #### Authorization setup
-First, I set up an AuthProvider that uses the useContext hook of React to give the app access to the login/logout functions and the current user values. In this, I took inspiration from Ben Awad. Reading the Apollo Client docs I found this new feature 'reactive variable' which sounded really cool so I refactored my auth logic to use that in combination with the Apollo cache. This way, I had immediate and global access to a function that could switch the isSignedIn state. The App immediately picks up when a user is logged in and sends them to their home stack. 
+Because I wanted to explore Apollo Client, I refactored my original AuthContext hook to a [reactive variable](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#storing-local-state-in-reactive-variables) in combination with the Apollo cache. This way, the App will automatically pick up whether a user is logged in, so they can be sent to the appropriate navigation stack (Auth or Home). 
 
 ```
 export const isSignedInVar = makeVar()
