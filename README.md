@@ -20,7 +20,13 @@ Of course, the main reason for this app is for me to practice & learn full stack
 - PostgreSQL
 - Express
 - Apollo Server
-- JWT Authorization
+- JWT
+
+The activity seeds file generates random coordinates, so activities are spread across Amsterdam:
+``` 
+          latitude: (52.3 + Math.random() / 10).toFixed(6),
+          longitude: (4.8 + Math.random() / 5).toFixed(6),
+```
 
 ### Frontend
 
@@ -29,40 +35,8 @@ Of course, the main reason for this app is for me to practice & learn full stack
 - Font Awesome
 - React Native Paper (Material UI framework)
 
-### Under the hood
+I use the Apollo [reactive variable](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#storing-local-state-in-reactive-variables) to automatically send users to the Home stack when they sign in (or still have a token). 
 
-There are a few things happening under the hood that I think are nice to share. 
-
-#### Authorization setup
-Because I wanted to explore Apollo Client, I refactored my original AuthContext hook to a [reactive variable](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#storing-local-state-in-reactive-variables) in combination with the Apollo cache. This way, the App will automatically pick up whether a user is logged in, so they can be sent to the appropriate navigation stack (Auth or Home). 
-
-```
-export const isSignedInVar = makeVar()
-
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        isSignedIn: {
-          read() {
-            return isSignedInVar()
-          },
-        },
-      },
-    },
-  },
-})
-```
-
-#### Randomly generated coordinates
-When I was seeding some dummy data to see how the activities looked on the map, I first hardcoded the coordinates and changed a few numbers here and there to spread them around a bit. Well, when I fired up the App, they all turned out to be in Westerpark. Not exactly random and of course a bit inconsiderate to the rest of the city. So to solve this problem I set some outer boundaries in which I wanted my activities to be and then wrote the following function to generate random coordinates within this field: 
-
-``` 
-          latitude: (52.3 + Math.random() / 10).toFixed(6),
-          longitude: (4.8 + Math.random() / 5).toFixed(6),
-```
-
-Simple, but fun.
 
 ## Documentation
 
