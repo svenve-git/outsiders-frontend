@@ -35,7 +35,7 @@ The activity seeds file generates random coordinates, so activities are spread a
 - Font Awesome
 - React Native Paper (Material UI framework)
 
-I experimented with the Apollo [reactive variable](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#storing-local-state-in-reactive-variables) to automatically send users to the Home stack when they sign in (or still have a token). 
+I used the new Apollo [reactive variable](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#storing-local-state-in-reactive-variables) to automatically send users to the Home stack when they sign in (or still have a token). 
 
 
 ## Documentation
