@@ -47,3 +47,7 @@ I use the Apollo [reactive variable](https://www.apollographql.com/docs/react/lo
 [Database Diagram](./docs/Database_diagram.png)
 
 [Project Board](./docs/Project_Board_Screenshot.png)
+
+[Example Pull Request 1](https://github.com/svenve-git/outsiders-frontend/pull/6)
+
+[Example Pull Request 2](https://github.com/svenve-git/outsiders-frontend/pull/13)
