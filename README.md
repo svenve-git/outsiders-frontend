@@ -4,12 +4,11 @@
 
 This project gives a platform to find, create and share outdoor activities. It helps people host and join activities, so they can enjoy being outdoor together. So do you feel like going out, but are bored of the obligatory 'jog around the block'? Or just feel like kicking a ball with some other people? Post a public activity and invite them! Or have a look and see what's happening.
 
-Of course, the main reason for this app is for me to practice & learn full stack development, and showcase some of the things I have learned. It's probably good to know that I had two weeks to build the MVP, and was my first project using Apollo GraphQL and React Native. 
+Of course, the main reason for this app is for me to practice & learn full stack development, and showcase some of the things I have learned. It's probably good to know that I had two weeks to build the MVP, and that it was my first project using Apollo GraphQL and React Native. 
 
 ## Demo
 
 <img src="./Outsiders_demo.gif" width="250">
-(Outsiders_demo.gif) 
 
 
 ## Stack:
