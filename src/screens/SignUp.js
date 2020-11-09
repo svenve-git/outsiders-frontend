@@ -1,5 +1,11 @@
 import React, { useState } from "react"
-import { View, StyleSheet, Pressable, Image } from "react-native"
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  Image,
+  ImageBackground,
+} from "react-native"
 import { Text, TextInput, Button, Banner } from "react-native-paper"
 import { FontAwesome5 } from "@expo/vector-icons"
 import { useMutation } from "@apollo/client"
@@ -59,8 +65,8 @@ export default function SignUpScreen({ navigation }) {
     <View style={styles.container}>
       <Image
         style={styles.background}
-        source={require("../assets/5574.jpg")}
-      ></Image>
+        source={require("../assets/5574_1.png")}
+      />
       {/* <Banner
         style={styles.background}
         source={require("../assets/5574.jpg")}
@@ -71,7 +77,7 @@ export default function SignUpScreen({ navigation }) {
       > */}
       {/* </ImageBackground> */}
       {/* <Text style={styles.heading}></Text> */}
-      <Text style={styles.feedback}>{message}</Text>
+      {/* <Text style={styles.feedback}>{message}</Text> */}
       <View style={styles.form}>
         <TextInput
           style={styles.input}
@@ -180,28 +186,30 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   background: {
-    // height: "200px",
+    flex: 1,
+    marginTop: "20%",
   },
   feedback: {
     height: "15%",
   },
   form: {
     justifyContent: "center",
-    marginTop: 250,
+    marginTop: "20%",
   },
   input: {
     height: 40,
     width: 300,
-    marginBottom: 20,
+    marginBottom: "5%",
     backgroundColor: "white",
   },
   heading: {
     fontSize: 40,
     fontWeight: "600",
-    marginTop: 40,
+    marginTop: "5%",
   },
   text: {
-    marginTop: 80,
+    marginTop: "10%",
+    marginBottom: "10%",
     justifyContent: "center",
     alignSelf: "center",
   },
