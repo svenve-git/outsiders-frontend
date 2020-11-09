@@ -8,7 +8,7 @@ Of course, the main reason for this app is for me to practice & learn full stack
 
 ## Demo
 
-<img src="./Outsiders_demo.gif" width="250">
+<img src="./demo.gif" width="250">
 
 
 ## Stack:
