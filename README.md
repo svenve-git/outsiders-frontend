@@ -8,7 +8,8 @@ Of course, the main reason for this app is for me to practice & learn full stack
 
 ## Demo
 
-![](Outsiders_demo.gif) 
+<img src="./Outsiders_demo.gif" width="250">
+(Outsiders_demo.gif) 
 
 
 ## Stack:
