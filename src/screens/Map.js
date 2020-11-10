@@ -78,6 +78,7 @@ export default function MapScreen({ navigation }) {
           label="this week"
           onPress={() => {
             setDate("this week")
+            console.log("im pressed")
           }}
         />
       </View>
@@ -124,25 +125,28 @@ export default function MapScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: "10%",
-    ...StyleSheet.absoluteFillObject,
+    marginTop: "15%",
+    // ...StyleSheet.absoluteFillObject,
     flex: 1,
     alignItems: "center",
   },
   map: {
-    height: "100%",
+    // height: "100%",
     ...StyleSheet.absoluteFillObject,
-    // flex: 1,
+    zIndex: -1,
   },
   filters: {
     margin: "2%",
     flexDirection: "row",
     justifyContent: "space-around",
+
+    // position: "absolute",
   },
   fab: {
     position: "absolute",
     margin: 16,
     right: 0,
     bottom: 0,
+    backgroundColor: "#FF521B",
   },
 })
