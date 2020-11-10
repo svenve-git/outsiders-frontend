@@ -81,7 +81,6 @@ export default function App() {
                 <Stack.Screen
                   name="Welcome"
                   options={{ header: () => null }}
-                  // screenOptions={{}}
                   component={WelcomeScreen}
                 />
                 <Stack.Screen
