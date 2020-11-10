@@ -1,17 +1,15 @@
 import { useQuery, useReactiveVar } from "@apollo/client"
 import AsyncStorage from "@react-native-community/async-storage"
 import React from "react"
-import { View, Text } from "react-native"
-import { FlatList } from "react-native-gesture-handler"
+import { View, StyleSheet } from "react-native"
 import { FontAwesome5 } from "@expo/vector-icons"
 import {
   ActivityIndicator,
   Button,
   Card,
   Headline,
-  List,
   Paragraph,
-  Title,
+  Text,
 } from "react-native-paper"
 import { client, isSignedInVar } from "../config"
 import { CURRENTUSER } from "../queries/queries"
@@ -37,10 +35,10 @@ export default function ProfileScreen({ navigation }) {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <FontAwesome5 name="user" size={50} style={{ padding: 25 }} />
-      {/* <Headline style={{ padding: 15 }}>{user.currentUser.fullName}</Headline> */}
-      {/* <Text style={{ padding: 15 }}>{user.currentUser.address}</Text> */}
+      <Headline style={{ padding: 15 }}>{user.currentUser.fullName}</Headline>
+      <Text style={{ padding: 15 }}>{user.currentUser.address}</Text>
       <Card>
         <Card.Title title="My favourite activities" />
         <Card.Content>
@@ -53,10 +51,18 @@ export default function ProfileScreen({ navigation }) {
           <Paragraph>Power walking</Paragraph>
         </Card.Content>
       </Card>
-      <Card>
+      {/* <Card>
         <Card.Title title="Friends" />
-      </Card>
-      <Button onPress={logout}>Log out</Button>
+      </Card> */}
+      <Button style={{ marginTop: "20%" }} onPress={logout}>
+        Log out
+      </Button>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: "20%",
+  },
+})
