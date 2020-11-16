@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, Picker } from "react-native"
 import MapView, { Marker } from "react-native-maps"
+import { FontAwesome5 } from "@expo/vector-icons"
 import { useMutation, useQuery } from "@apollo/client"
-import { Picker } from "@react-native-community/picker"
 import {
   FETCH_ACTIVITYTYPES,
   CREATE_ACTIVITY,
@@ -17,15 +17,15 @@ import {
   Modal,
   IconButton,
   ActivityIndicator,
+  FAB,
+  Headline,
 } from "react-native-paper"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import moment from "moment"
 
 /**
  * To do:
- * Implement a map to set lat/long
- *      - set LatLong onDragEnd
- * Fix dateTimePicker
+ * Fix date
  * Styling
  */
 
@@ -42,26 +42,15 @@ export default function CreateActivityScreen({ navigation }) {
   /**
    *    MapView
    */
-
   const [visible, setVisible] = useState(false)
-
   const showModal = () => setVisible(true)
-
   const hideModal = () => setVisible(false)
-
   const initialRegion = {
     latitude: 52.382534,
     longitude: 4.913762,
     latitudeDelta: 0.0299,
     longitudeDelta: 0.0299,
   }
-
-  const initialMarker = {
-    latitude: 52.382534,
-    longitude: 4.913762,
-  }
-  // const [region, setRegion] = useState(initialRegion)
-  const [marker, setMarker] = useState(initialMarker)
 
   // console.log("Marker location:", marker)
 
@@ -74,10 +63,11 @@ export default function CreateActivityScreen({ navigation }) {
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date
-    setShow(Platform.OS === "iOS") // <---------- Double check in the docs if this is a legitimate value
-    setDate(moment(selectedDate).format("YYYY-MM-DD"))
-    setStartingTime(moment(selectedDate).format("HH:mm")) // <--------------- refactor with moment
-    console.log("selected date:", currentDate, "start time:", startingTime)
+    setShow(Platform.OS === "ios") // <---------- Double check in the docs if this is a legitimate value
+    setDate(currentDate)
+    // setDate(moment(selectedDate).format("YYYY-MM-DD"))
+    // setStartingTime(moment(selectedDate).format("HH:mm"))
+    // console.log("selected date:", currentDate, "start time:", startingTime)
   }
 
   const showMode = (currentMode) => {
@@ -96,7 +86,8 @@ export default function CreateActivityScreen({ navigation }) {
   /**
    * Form state & submit
    */
-  const [title, setTitle] = useState("Saturday morning walk")
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("") // needs to be implemented
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"))
   const [hostId, setHostId] = useState()
   const [latitude, setLatitude] = useState(52.382534)
@@ -105,6 +96,7 @@ export default function CreateActivityScreen({ navigation }) {
   const [startingTime, setStartingTime] = useState(moment().format("HH:mm")) // how does this translate to backend? ==> should we use Time scalar?
   const [isPrivate, setIsPrivate] = useState(false)
   const toggleSwitch = () => setIsPrivate((previousState) => !previousState)
+  const [selectedValue, setSelectedValue] = useState("Any")
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -119,25 +111,6 @@ export default function CreateActivityScreen({ navigation }) {
       setMessage("Please fill in all the required fields")
     }
     try {
-      console.log(
-        "arguments passed:",
-        title,
-        typeof title,
-        date,
-        typeof date,
-        hostId,
-        typeof hostId,
-        latitude,
-        typeof latitude,
-        longitude,
-        typeof longitude,
-        activityTypeId,
-        typeof activityTypeId,
-        startingTime,
-        typeof startingTime,
-        isPrivate,
-        typeof isPrivate
-      )
       await createActivity({
         variables: {
           title,
@@ -150,13 +123,14 @@ export default function CreateActivityScreen({ navigation }) {
           startingTime,
         },
       })
-      console.log("RESPONSE:", response)
+      // console.log("RESPONSE:", response)
+      // if (errorCreateActivity) {
+      // setMessage("Couldn't create activity")
+      // console.log("Error@createActivity request:", errorCreateActivity)
+      // } else {
       setMessage("Activity created!")
-      if (errorCreateActivity) {
-        setMessage("Couldn't create activity")
-        console.log("Error@createActivity request:", errorCreateActivity)
-      }
       console.log("CreateActivity response:", responseActivity)
+      // }
     } catch (e) {
       console.log("Caught error:", e)
     }
@@ -191,99 +165,148 @@ export default function CreateActivityScreen({ navigation }) {
    */
   return (
     <View style={styles.container}>
-      <View style={styles.form}>
-        <Text>{message}</Text>
-        <TextInput
-          placeholder="Saturday morning walk, 9h, WP"
-          value={title}
-          onChangeText={(text) => setTitle(text)}
-        />
-        <View key="DateTimePicker">
-          <Button onPress={showDatepicker} title="Show date picker!">
-            Select date
-          </Button>
-          <Button onPress={showTimepicker} title="Show time picker!">
-            Pick a starting time
-          </Button>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </View>
-        <>
-          <Text>Select location:</Text>
-          <IconButton icon="map" size={20} onPress={showModal} />
-        </>
-        <Portal>
-          <Modal
-            visible={visible}
-            onDismiss={hideModal}
-            contentContainerStyle={styles.mapContainer}
-          >
-            <MapView
-              style={styles.map}
-              initialRegion={initialRegion}
-              // region={region}
-              // onRegionChange={(region) => setRegion(region)}
-              // moveOnMarkerPress={false}
-            >
-              <Marker
-                key="2"
-                title="Location selector"
-                draggable
-                coordinate={marker}
-                onDragEnd={(marker) => setMarker(marker)}
-              ></Marker>
-            </MapView>
-          </Modal>
-        </Portal>
-        <View>
-          <Text>Select the activity type:</Text>
-          <Picker
-            selectedValue={activityTypeId}
-            style={{ height: 50, width: 200 }}
-            onValueChange={(itemValue, itemIndex) =>
-              setActivityType(parseInt(itemValue))
-            }
-          >
-            <Picker.Item key="any" label="Any" value="Any" />
-            {data.allActivityTypes.map((type) => (
-              <Picker.Item key={type.id} label={type.name} value={type.id} />
-            ))}
-          </Picker>
-          <Text>{activityTypeId}</Text>
-        </View>
-        <>
-          <Text>This activity is {isPrivate ? "Private" : "Public"}</Text>
-          <Switch
-            label="Private"
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isPrivate ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isPrivate}
+      {message === "Activity created!" ? (
+        <Headline style={{ backgroundColor: "#ACE4AA", padding: 20 }}>
+          {message}
+        </Headline>
+      ) : null}
+      <TextInput
+        placeholder="Title"
+        style={styles.input}
+        value={title}
+        onChangeText={(text) => setTitle(text)}
+      />
+      <TextInput
+        placeholder="Description"
+        style={styles.input}
+        value={description}
+        onChangeText={(text) => setTitle(text)}
+      />
+      <View key="DateTimePicker">
+        <Button style={styles.button} onPress={showDatepicker}>
+          Select a date
+        </Button>
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="datetime"
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
           />
-        </>
-        {/* <View>
+        )}
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginHorizontal: "5%",
+          marginTop: "5%",
+        }}
+      >
+        <Text>Location:</Text>
+        <IconButton icon="target" size={25} onPress={showModal} />
+      </View>
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={hideModal}
+          contentContainerStyle={styles.mapContainer}
+        >
+          <MapView
+            style={styles.map}
+            initialRegion={initialRegion}
+            onRegionChangeComplete={(region) => {
+              setLatitude(region.latitude)
+              setLongitude(region.longitude)
+            }}
+          ></MapView>
+          <FontAwesome5
+            name="map-pin"
+            size={35}
+            color="#FF521B"
+            style={styles.marker}
+          />
+          <FAB
+            style={{ marginTop: "90%", backgroundColor: "#FF521B" }}
+            label="Select"
+            onPress={hideModal}
+          />
+        </Modal>
+      </Portal>
+      <View
+        style={{
+          flexDirection: "row",
+          flexWrap: "nowrap",
+          marginHorizontal: "5%",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text>Type:</Text>
+        <Picker
+          selectedValue={selectedValue}
+          style={{ width: "60%" }}
+          onValueChange={(itemValue, itemIndex) => {
+            console.log("value:", itemValue, "index:", itemIndex)
+            setActivityType(itemIndex)
+            setSelectedValue(itemValue)
+          }}
+        >
+          <Picker.Item key="any" label="Any" value="Any" />
+          {data.allActivityTypes.map((type) => (
+            <Picker.Item key={type.id} label={type.name} value={type.name} />
+          ))}
+        </Picker>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          margin: "5%",
+        }}
+      >
+        <Text>
+          This activity is{" "}
+          {isPrivate ? "private (invitation needed)" : "public"}
+        </Text>
+        <Switch
+          label="Private"
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isPrivate ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isPrivate}
+        />
+      </View>
+      {/* <View>
           <Text>Starting time: {startingTime}</Text>
         </View> */}
-        <Button title="Create activity" onPress={submitHandler}>
-          Create activity
-        </Button>
-      </View>
+      <Button style={styles.button} onPress={() => {}}>
+        Invite friends
+      </Button>
+      <Button style={styles.button} onPress={submitHandler}>
+        Create activity
+      </Button>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: "white",
+    height: "100%",
+  },
   form: {},
+  input: {
+    backgroundColor: "white",
+    marginTop: "5%",
+  },
+  button: {
+    marginTop: "5%",
+  },
   mapContainer: {
     // ...StyleSheet.absoluteFillObject,
     width: "100%",
@@ -299,5 +322,12 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
 
     // flex: 1,
+  },
+  marker: {
+    left: "50%",
+    marginLeft: -10,
+    marginTop: -28,
+    position: "absolute",
+    top: "50%",
   },
 })
