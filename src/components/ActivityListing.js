@@ -1,8 +1,10 @@
 import React, { useState } from "react"
-import { View, Text } from "react-native"
+import { View, Text, StyleSheet } from "react-native"
 import { FontAwesome5 } from "@expo/vector-icons"
 import Animated from "react-native-reanimated"
-import {} from ""
+// import {} from ""
+import { TouchableHighlight } from "react-native-gesture-handler"
+import { Divider } from "react-native-paper"
 
 /**
  * To do:
@@ -11,33 +13,42 @@ import {} from ""
  */
 
 export default function ActivityListing(props) {
-  const [show, setShow] = useState(false)
-  const transition = useTransition(
-    open,
-    open ? 0 : 1,
-    open ? 1 : 0,
-    400,
-    Easing
-  )
-  const height = show ? "auto" : 0
-  const bottomRadius = open ? 0 : 8
+  const [showDetails, setShowDetails] = useState(false)
+  console.log(props)
+  // const transition = useTransition(
+  //   open,
+  //   open ? 0 : 1,
+  //   open ? 1 : 0,
+  //   400,
+  //   Easing
+  // )
+  // const height = show ? "auto" : 0
+  // const bottomRadius = open ? 0 : 8
 
   return (
-    <Pressable
-      onPress={() => {
-        console.log("I'm pressed", props.title)
-        setShowDetails((prev) => !prev)
-      }}
-      key={props.id}
-    >
-      <Animated.View style={styles.listItem}>
-        <FontAwesome5 name="running" />
-        <Text>{props.title}</Text>
-        <Text></Text>
-        <Button title="View" />
-        <Divider />
-      </Animated.View>
-    </Pressable>
+    <View style={styles.listItem}>
+      <TouchableHighlight
+        onPress={() => {
+          setShowDetails((prev) => !prev)
+        }}
+        key={props.id}
+      >
+        <>
+          <FontAwesome5 name="running" />
+          <Text>{props.title}</Text>
+          {showDetails && (
+            <View>
+              <Text>
+                Starts: {props.date} at {props.startingTime}
+              </Text>
+              <Text>Host: {props.host.fullName}</Text>
+            </View>
+          )}
+
+          <Divider />
+        </>
+      </TouchableHighlight>
+    </View>
   )
 }
 
