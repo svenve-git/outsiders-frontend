@@ -1,22 +1,22 @@
 import React, { useState } from "react"
-import { ScrollView, View, StyleSheet, Pressable, Picker } from "react-native"
+import { ScrollView, View, StyleSheet, Image, Picker } from "react-native"
 import {
   Text,
-  Button,
   FAB,
-  Title,
-  Paragraph,
-  List,
   ActivityIndicator,
   Divider,
+  Headline,
 } from "react-native-paper"
 import { useQuery } from "@apollo/client"
 import { FETCH_ACTIVITIES_AND_TYPES } from "../queries/queries"
-import { FontAwesome5 } from "@expo/vector-icons"
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native-gesture-handler"
+// import { FontAwesome5 } from "@expo/vector-icons"
+import { TouchableHighlight } from "react-native-gesture-handler"
+// import ActivityListing from "../components/ActivityListing"
+// import * as Svg from "react-native-svg"
+// import SvgUri from "react-native-svg-uri"
+import SvgIcon from "../components/SvgIcon"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { color } from "react-native-reanimated"
 /**
  * To do:
  * Write component for individual listings
@@ -31,6 +31,7 @@ export default function ListScreen({ navigation }) {
   const { loading, error, data } = useQuery(FETCH_ACTIVITIES_AND_TYPES)
   const [activityType, setActivityType] = useState("Any")
   const [showDetails, setShowDetails] = useState(false)
+  // const imagepath = require(`../assets/icons/${activity.activityType}.svg`)
 
   if (loading) {
     return (
@@ -64,22 +65,31 @@ export default function ListScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View>
-        <Picker
-          selectedValue={activityType}
-          style={{ height: 50, width: 200 }}
-          onValueChange={(itemValue) => setActivityType(itemValue)}
-        >
-          <Picker.Item key="Any" label="Any" value="Any" />
-          {activityTypes.map((type) => {
-            return (
-              <Picker.Item key={type.id} label={type.name} value={type.name} />
-            )
-          })}
-        </Picker>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={{ fontSize: 18, alignSelf: "center", margin: 10 }}>
+          Select type:{" "}
+        </Text>
+        <View style={{ marginVertical: 10, borderWidth: 0.5 }}>
+          <Picker
+            selectedValue={activityType}
+            style={{ height: 30, width: 260, color: "black" }}
+            onValueChange={(itemValue) => setActivityType(itemValue)}
+          >
+            <Picker.Item key="Any" label="Any" value="Any" />
+            {activityTypes.map((type) => {
+              return (
+                <Picker.Item
+                  key={type.id}
+                  label={type.name}
+                  value={type.name}
+                />
+              )
+            })}
+          </Picker>
+        </View>
       </View>
       <ScrollView>
-        {/* {loading ? (
+        {loading ? (
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
@@ -87,29 +97,33 @@ export default function ListScreen({ navigation }) {
           </View>
         ) : (
           listedActivities.map((activity, index) => (
-            <View style={styles.listItem}>
+            // <ActivityListing key={index} props={activity} />
+            <View key={activity.id}>
               <TouchableHighlight
                 onPress={() => {
                   setShowDetails(index === showDetails ? null : index)
                 }}
-                key={activity.id}
+                style={styles.card}
               >
-                <FontAwesome5 name="running" />
-                <Text>{activity.title}</Text>
-                {index === showDetails && (
+                <View style={styles.item}>
+                  <View style={styles.itemHeader}>
+                    <SvgIcon type={activity.activityType} />
+                    <Headline style={styles.title}>{activity.title}</Headline>
+                  </View>
+                  {/* {index === showDetails && ( */}
                   <View style={styles.details}>
                     <Text>
                       Starts: {activity.date} at {activity.startingTime}
                     </Text>
                     <Text>Host: {activity.host.fullName}</Text>
                   </View>
-                )}
-
-                <Divider />
+                  {/* )} */}
+                </View>
               </TouchableHighlight>
+              <Divider style={styles.divider} />
             </View>
           ))
-        )} */}
+        )}
       </ScrollView>
       <FAB
         style={styles.fab}
@@ -124,42 +138,45 @@ export default function ListScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: "10%",
+    marginTop: "15%",
     flex: 1,
-    // alignItems: "center",
     justifyContent: "center",
   },
-  // buttons: {
-  //   marginTop: 80,
-  //   marginBottom: 40,
-  // },
   text: {
     fontSize: 20,
   },
-  listItem: {
+  title: {
+    marginTop: 5,
+  },
+  item: {
+    backgroundColor: "white",
+    flexGrow: 1,
+    paddingLeft: 5,
+  },
+  itemHeader: {
     flexGrow: 1,
     flexDirection: "row",
     flexWrap: "nowrap",
-
-    paddingLeft: 20,
-    paddingRight: 20,
+    alignContent: "center",
+  },
+  details: { marginLeft: 35, paddingBottom: 8 },
+  divider: { width: "100%" },
+  card: {
+    marginLeft: 6,
+    marginRight: 10,
+    width: "96%",
     shadowColor: "#000000",
     shadowOpacity: 0.8,
     shadowRadius: 10,
-    marginBottom: 3,
-    elevation: 3,
-  },
-  details: {},
-  card: {
-    height: 50,
-    marginLeft: 6,
-    marginRight: 6,
-    width: 300,
+    marginBottom: 9,
+    paddingBottom: 5,
+    elevation: 0.5,
   },
   fab: {
     position: "absolute",
     margin: 16,
     right: 0,
     bottom: 0,
+    backgroundColor: "#FF521B",
   },
 })
